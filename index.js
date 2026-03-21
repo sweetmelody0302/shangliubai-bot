@@ -23,7 +23,11 @@ app.post('/webhook', line.middleware(lineConfig), (req, res) => {
 
 async function handleEvent(event) {
   const userId = event.source.userId;
-
+// 🚨 隱形側錄器：只要有人打字，就在 Zeabur 後台偷偷印出他的名字和 ID
+  if (event.type === 'message' && event.message.type === 'text') {
+      console.log(`【X光側錄】有人說話了！內容：「${event.message.text}」 -> 他的真實 ID 是：${userId}`);
+  }
+  
   // 🚨 萬能抓 ID 專用開關 (防呆升級：大小寫都通吃！)
   if (event.type === 'message' && event.message.type === 'text') {
       // 把輸入的字變成小寫，並去掉前後多餘的空白
